@@ -1,5 +1,34 @@
 # Python
 __pycache__/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+
+# Env files
+.env
+*.env
+
+# SQLite
+*.sqlite3
+database.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Swap files
+*.swp
+*.swo
 *.pyc
 *.pyo
 *.pyd
