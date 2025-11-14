@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UniTrack • Course Details</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #121212;
+      color: #e5e5e5;
+      padding-top: 72px;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+    .navbar, footer {
+      background-color: #1f1f1f !important;
+    }
+    .card {
+      background-color: #1d1d1d;
+      border: 1px solid #333;
+    }
+    .table thead {
+      background-color: #242424;
+    }
+    .table-hover tbody tr:hover {
+      background-color: #2a2a2a;
+    }
+    a { color: #61a8ff; }
+    .brand { font-weight: 700; font-size: 1.15rem; color: #fff; }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand brand" href="{{ url_for('index') }}">UniTrack</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('courses') }}">Courses</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Students</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="max-width: 900px;">
+    <div class="d-flex align-items-start justify-content-between mb-3">
+      <div>
+        <h1 class="h4 mb-1">Course Details</h1>
+        <p class="text-muted small mb-0">Details for the selected course</p>
+      </div>
+      <div class="text-end">
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('courses') }}">Back to Courses</a>
+      </div>
+    </div>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-3">
+          {% for category, msg in messages %}
+            <div class="alert alert-{{ 'warning' if category=='warning' else ('success' if category=='success' else ('danger' if category=='error' else 'info')) }} alert-dismissible fade show" role="alert">
+              {{ msg }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Course summary -->
+    <div class="card mb-4 p-3">
+      <div class="table-responsive">
+        <table id="course-detail" class="table table-borderless mb-0">
+          <thead class="visually-hidden">
+            <tr>
+              <th>Course Code</th>
+              <th>Course Name</th>
+              <th>Course Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fw-semibold">Code:</td>
+              <td>{{ course.course_code }}</td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Name:</td>
+              <td>{{ course.course_name }}</td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Description:</td>
+              <td>{{ course.course_description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Enrollment list -->
+    <h2 class="h5 mb-3">Enrollment List</h2>
+
+    {% if course.students %}
+      <div class="card p-0">
+        <div class="table-responsive">
+          <table id="course-table" class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">SNo</th>
+                <th scope="col">Roll Number</th>
+                <th scope="col">Student First Name</th>
+                <th scope="col">Student Last Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for student in course.students %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>
+                    <a href="{{ url_for('student_detail', student_id=student.student_id) }}">
+                      {{ student.roll_number }}
+                    </a>
+                  </td>
+                  <td>{{ student.first_name }}</td>
+                  <td>{{ student.last_name }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% else %}
+      <div class="card p-3">
+        <p class="mb-0">No students enrolled in this course yet.</p>
+      </div>
+    {% endif %}
+
+  </main>
+
+  <footer class="mt-5 py-4 text-center text-muted small">
+    © 2025 UniTrack — Course Details
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
